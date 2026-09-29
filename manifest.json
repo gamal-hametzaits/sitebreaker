@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Sitebreaker - איש המקל",
+  "version": "1.0.0",
+  "description": "משחק איש מקל שמפוצץ רכיבים בעמוד בלחיצות עכבר. מקומי בלבד.",
+  "permissions": ["activeTab", "scripting"],
+  "action": { "default_title": "הפעל/כבה את איש המקל בעמוד" },
+  "background": { "service_worker": "background.js" }
+}
