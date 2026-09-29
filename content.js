@@ -62,7 +62,7 @@
       piece.style.setProperty('--rot',((Math.random()-.5)*250)+'deg');
       shadow.append(piece);shards.push(piece);setTimeout(()=>{piece.remove();shards=shards.filter(s=>s!==piece)},850);
     }
-    hidden.set(element,element.style.getPropertyValue('visibility'));
+    hidden.set(element,{value:element.style.getPropertyValue('visibility'),priority:element.style.getPropertyPriority('visibility')});
     element.style.setProperty('visibility','hidden','important');
     points++;score.textContent='💥 '+points;
   }
@@ -79,12 +79,12 @@
     ctx.clearRect(0,0,w,h);
     // Ground shadow and articulated stickman, following the last shot direction.
     ctx.fillStyle='#0008';ctx.beginPath();ctx.ellipse(player.x,player.y+20,27,5,0,0,7);ctx.fill();
-    ctx.strokeStyle='#1b273b';ctx.lineWidth=5;ctx.lineCap='round';
+    ctx.strokeStyle='#91ddff';ctx.shadowColor='#122238';ctx.shadowBlur=6;ctx.lineWidth=5;ctx.lineCap='round';
     const line=(a,b,c,d)=>{ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(c,d);ctx.stroke()};
     line(player.x,player.y-39,player.x,player.y-5);line(player.x,player.y-5,player.x-13,player.y+18);line(player.x,player.y-5,player.x+15,player.y+18);
     line(player.x,player.y-29,player.x-12,player.y-15);line(player.x,player.y-29,player.x+22,player.y-32);
     ctx.fillStyle='#f9e8cc';ctx.beginPath();ctx.arc(player.x,player.y-51,11,0,7);ctx.fill();ctx.stroke();
-    ctx.fillStyle='#394957';ctx.fillRect(player.x+18,player.y-36,22,8);
+    ctx.fillStyle='#ff674e';ctx.fillRect(player.x+18,player.y-36,22,8);ctx.shadowBlur=0;
     projectiles=projectiles.filter(p=>{
       p.progress+=.065;const t=Math.min(1,p.progress);const x=p.x+(p.tx-p.x)*t,y=p.y+(p.ty-p.y)*t-55*Math.sin(Math.PI*t);
       ctx.strokeStyle='#ff873d';ctx.lineWidth=3;line(x-13,y+3,x-3,y);ctx.fillStyle='#fff2ae';ctx.beginPath();ctx.arc(x,y,5,0,7);ctx.fill();
@@ -96,7 +96,7 @@
   function stop(){
     if(!running)return;running=false;cancelAnimationFrame(raf);
     document.removeEventListener('click',shoot,true);document.removeEventListener('keydown',key,true);window.removeEventListener('resize',resize);
-    hidden.forEach((value,el)=>{if(el.isConnected){if(value)el.style.setProperty('visibility',value);else el.style.removeProperty('visibility');}});
+    hidden.forEach((original,el)=>{if(el.isConnected){if(original.value)el.style.setProperty('visibility',original.value,original.priority);else el.style.removeProperty('visibility');}});
     hidden.clear();host.remove();delete window.__sitebreaker;
   }
   close.addEventListener('click',stop);
