@@ -45,7 +45,9 @@
   }
   function burst(x,y,element){
     for(let i=0;i<25;i++){let a=Math.random()*Math.PI*2,s=2+Math.random()*8;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:30+Math.random()*25,color:['#ff674e','#ffcc6e','#fff2d0','#aee5ff'][i%4]});}
-    if(!element) return;
+    // Several shots can reach the same target before its first hit finishes.
+    // Keep the first visibility snapshot so stopping always restores the page.
+    if(!element || hidden.has(element)) return;
     const rect=element.getBoundingClientRect();
     // Avoid exposing form contents; visual shards use only computed background color.
     const cs=getComputedStyle(element);
